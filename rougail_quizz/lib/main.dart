@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+class Question {
+  String texte;
+  bool reponse;
+
+  Question(this.texte, this.reponse);
+}
+
 void main() {
   runApp(const QuizzApp());
 }
@@ -56,15 +63,36 @@ class EcranQuizz extends StatefulWidget {
 
 class _EcranQuizzState extends State<EcranQuizz> {
   int score = 0;
+  int indexQuestion = 0; // Pour savoir quelle question afficher
 
-  void verifierReponse(bool reponseUtilisateur) {
+  // Voici ta banque de questions
+  List<Question> listeDeQuestions = [
+    Question("Debian 12 est une distribution Linux ?", true),
+    Question("Flutter utilise le langage PHP ?", false),
+    Question("Le CDA est un titre de niveau 6 ?", true),
+    Question("L'accessibilité est inutile en mobile ?", false),
+  ];
+
+  void verifierReponse(bool choixUtilisateur) {
     // Logique pour vérifier la réponse de l'utilisateur
     // Par exemple, si la bonne réponse est "true" :
-    bool bonneReponse = true; // Remplacez par la logique réelle
+    bool bonneReponse = listeDeQuestions[indexQuestion].reponse; // Remplacez par la logique réelle
 
     setState(() {
-      if (reponseUtilisateur == bonneReponse) {
+      // 1. Vérification du score
+      if (choixUtilisateur == bonneReponse) {
         score++;
+      }
+
+      // 2. Passage à la question suivante ou reset
+      if (indexQuestion < listeDeQuestions.length - 1) {
+        indexQuestion++;
+      } else {
+        // Optionnel : On peut afficher un message de fin ici
+        print("Fin du quizz ! Score final : $score");
+        // Pour l'exemple, on recommence à zéro
+        indexQuestion = 0;
+        score = 0;
       }
     });
   }
@@ -82,36 +110,69 @@ class _EcranQuizzState extends State<EcranQuizz> {
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: const Text('Rougail Quiz'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              "Est-ce que Debian 12 est une distribution Linux ?",
-              style: TextStyle(color: Colors.black, fontSize: 24),
-              textAlign: TextAlign.center,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Question actuelle avec une description pour les lecteurs d'écran
+            Semantics(
+              header: true,
+              label: "Question actuelle",
+              child:  Padding(
+                padding: EdgeInsets.all(24.0),
+                child: Text(
+                  listeDeQuestions[indexQuestion].texte, // Dynamique !                  
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () => verifierReponse(true),
-            child: const Text("VRAI"),
-          ),
-          ElevatedButton(
-            onPressed: () => verifierReponse(false),
-            child: const Text("FAUX"),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            "Score actuel : $score",
-            style: const TextStyle(color: Colors.green, fontSize: 20),
-          ),
-        ],
+
+           // 2. Boutons espacés et larges
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: SizedBox(
+                width: 200, height: 60, // Zone de clic confortable
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[800], foregroundColor: Colors.white),
+                  onPressed: () => verifierReponse(true),
+                  child: const Text("VRAI", style: TextStyle(fontSize: 20)),
+                ),
+              ),
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: SizedBox(
+                width: 200, height: 60,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.orange[900], foregroundColor: Colors.white),
+                  onPressed: () => verifierReponse(false),
+                  child: const Text("FAUX", style: TextStyle(fontSize: 20)),
+                ),
+              ),
+            ),
+            
+            const Divider(height: 50, indent: 50, endIndent: 50),
+
+            // 3. Score avec icône pour les daltoniens
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.star, color: Colors.amber, size: 30),
+                Text(
+                  " Score : $score",
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
