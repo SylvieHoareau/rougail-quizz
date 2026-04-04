@@ -87,15 +87,27 @@ class _EcranQuizzState extends State<EcranQuizz> {
       // 2. Passage à la question suivante ou reset
       if (indexQuestion < listeDeQuestions.length - 1) {
         indexQuestion++;
-      } else {
-        // Optionnel : On peut afficher un message de fin ici
-        print("Fin du quizz ! Score final : $score");
-        // Pour l'exemple, on recommence à zéro
-        indexQuestion = 0;
-        score = 0;
-      }
-    });
-  }
+      } 
+      else {
+        // --- LOGIQUE DE NAVIGATION ---
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EcranScore(
+              scoreFinal: score,
+              totalQuestions: listeDeQuestions.length,
+            ),
+          ),
+        ).then((_) {
+          // Ce code s'exécute quand on revient de l'écran score (après le pop)
+          setState(() {
+            indexQuestion = 0;
+            score = 0;
+          });
+        }
+        );
+      }});
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +182,45 @@ class _EcranQuizzState extends State<EcranQuizz> {
                   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                 ),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EcranScore extends StatelessWidget {
+  final int scoreFinal;
+  final int totalQuestions;
+
+  const EcranScore({super.key, required this.scoreFinal, required this.totalQuestions});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Résultat Final")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.emoji_events, size: 100, color: Colors.amber),
+            const SizedBox(height: 20),
+            Text(
+              "Bravo ! Ton score est de :",
+              style: const TextStyle(fontSize: 22),
+            ),
+            Text(
+              "$scoreFinal / $totalQuestions",
+              style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.green),
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                // On "dépile" pour revenir au premier écran
+                Navigator.pop(context);
+              },
+              child: const Text("Recommencer le Quiz"),
             ),
           ],
         ),
