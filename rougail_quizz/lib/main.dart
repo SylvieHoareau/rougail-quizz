@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const QuizzApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// L'entrée de l'application, la fonction main() est le point de départ de l'exécution de l'application Flutter. Elle appelle la fonction runApp() qui prend un widget comme argument et le rend à l'écran. Dans ce cas, nous passons une instance de MyApp, qui est le widget racine de notre application.
+class QuizzApp extends StatelessWidget {
+  const QuizzApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Rougail Quizz',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -30,13 +31,13 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const EcranQuizz(title: 'Rougail Quizz Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class EcranQuizz extends StatefulWidget {
+  const EcranQuizz({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -50,20 +51,21 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<EcranQuizz> createState() => _EcranQuizzState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _EcranQuizzState extends State<EcranQuizz> {
+  int score = 0;
 
-  void _incrementCounter() {
+  void verifierReponse(bool reponseUtilisateur) {
+    // Logique pour vérifier la réponse de l'utilisateur
+    // Par exemple, si la bonne réponse est "true" :
+    bool bonneReponse = true; // Remplacez par la logique réelle
+
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      if (reponseUtilisateur == bonneReponse) {
+        score++;
+      }
     });
   }
 
@@ -83,39 +85,33 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('Rougail Quiz'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              "Est-ce que Debian 12 est une distribution Linux ?",
+              style: TextStyle(color: Colors.black, fontSize: 24),
+              textAlign: TextAlign.center,
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+          ),
+          ElevatedButton(
+            onPressed: () => verifierReponse(true),
+            child: const Text("VRAI"),
+          ),
+          ElevatedButton(
+            onPressed: () => verifierReponse(false),
+            child: const Text("FAUX"),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            "Score actuel : $score",
+            style: const TextStyle(color: Colors.green, fontSize: 20),
+          ),
+        ],
       ),
     );
   }
