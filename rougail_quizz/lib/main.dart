@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'question.dart';
+import 'data.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
 class Question {
   String texte;
   bool reponse;
-
   Question(this.texte, this.reponse);
 }
 
@@ -38,7 +41,41 @@ class QuizzApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const EcranQuizz(title: 'Rougail Quizz Home Page'),
+      // On définit la page d'accueil de l'application, qui est un widget EcranAccueil. C'est la première page que les utilisateurs verront lorsqu'ils ouvriront l'application.
+      home: const EcranAccueil(),
+    );
+  }
+}
+
+// Ecran d'accueil
+class EcranAccueil extends StatelessWidget {
+  const EcranAccueil({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold( // Le Scaffold fournit la structure de base (appBar, body)
+      appBar: AppBar(title: const Text("Rougail Quizz")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/logo.png', height: 150),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    // AJOUT du paramètre title obligatoire ici !
+                    builder: (context) => const EcranQuizz(title: "Session Quizz"),
+                  ),
+                );
+              },
+              child: const Text("Lancer le Quizz"),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -67,16 +104,48 @@ class _EcranQuizzState extends State<EcranQuizz> {
 
   // Voici ta banque de questions
   List<Question> listeDeQuestions = [
-    Question("Debian 12 est une distribution Linux ?", true),
-    Question("Flutter utilise le langage PHP ?", false),
-    Question("Le CDA est un titre de niveau 6 ?", true),
-    Question("L'accessibilité est inutile en mobile ?", false),
+    Question("Le Piton de la Fournaise est l'un des volcans les plus actifs au monde.", true),
+    Question("La Réunion est située dans l'océan Atlantique.", false),
+    Question("Le chef-lieu de la Réunion est Saint-Denis.", true),
+    Question("La monnaie utilisée à la Réunion est le Franc Pacifique.", false),
+    Question("Le Piton des Neiges est le point culminant de l'île.", true),
+    Question("La Réunion possède trois cirques : Mafate, Cilaos et Salazie.", true),
+    Question("La Réunion est une île volcanique d'origine corallienne.", false),
+    Question("Le climat de la Réunion est tropical humide.", true),
+    Question("La langue régionale parlée est le Créole réunionnais.", true),
+    Question("La Réunion est une destination touristique populaire pour les amateurs de randonnée.", true),
+    Question("L'île de la Réunion fait partie de l'archipel des Mascareignes.", true),
+    Question('La "Route du Littoral" relie Saint-Denis à Saint-Pierre.', false),
   ];
+
+  // Future<List<Question>> loadQuestions() async {
+  //   // 1. Charger le fichier sous forme de chaîne de caractères
+  //   final String response = await rootBundle.loadString('assets/questions.json');
+    
+  //   // 2. Décoder la chaîne en liste d'objets dynamiques
+  //   final List<dynamic> data = json.decode(response);
+    
+  //   // 3. Transformer la liste dynamique en liste d'objets Question
+  //   return data.map((json) => Question(json['questionText'], json['isCorrect'])).toList();
+  // }
 
   void verifierReponse(bool choixUtilisateur) {
     // Logique pour vérifier la réponse de l'utilisateur
     // Par exemple, si la bonne réponse est "true" :
     bool bonneReponse = listeDeQuestions[indexQuestion].reponse; // Remplacez par la logique réelle
+
+    // Création du feedback visuel
+    final snackBar = SnackBar(
+      content: Text(
+        choixUtilisateur == bonneReponse ? "Bravo ! 🎉" : "Dommage... 😕",
+        style: const TextStyle(fontSize: 18),
+      ),
+      backgroundColor: choixUtilisateur == bonneReponse ? Colors.green : Colors.red,
+      duration: const Duration(milliseconds: 500), // Très court pour ne pas ralentir le jeu
+    );
+
+    // On affiche la barre
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     setState(() {
       // 1. Vérification du score
@@ -182,6 +251,19 @@ class _EcranQuizzState extends State<EcranQuizz> {
                   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                 ),
               ],
+            ),
+
+            const SizedBox(height: 30), // Un peu d'espace
+            OutlinedButton.icon(
+              onPressed: () {
+                // Cette commande ferme l'écran actuel et revient à l'accueil
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.home),
+              label: const Text("Quitter et retour à l'accueil"),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.redAccent, // Une couleur qui indique qu'on quitte
+              ),
             ),
           ],
         ),

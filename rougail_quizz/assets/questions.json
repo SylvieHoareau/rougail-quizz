@@ -1,0 +1,10 @@
+[
+  {
+    "questionText": "Le Piton de la Fournaise est l'un des volcans les plus actifs au monde.",
+    "isCorrect": true
+  },
+  {
+    "questionText": "La Réunion est située dans l'océan Atlantique.",
+    "isCorrect": false
+  }
+]
