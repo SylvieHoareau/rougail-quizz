@@ -134,14 +134,29 @@ class _EcranQuizzState extends State<EcranQuizz> {
     // Par exemple, si la bonne réponse est "true" :
     bool bonneReponse = listeDeQuestions[indexQuestion].reponse; // Remplacez par la logique réelle
 
+    // On détermine si la réponse est correcte pour le feedback visuel
+    bool estCorrect = choixUtilisateur == bonneReponse;
+
     // Création du feedback visuel
     final snackBar = SnackBar(
-      content: Text(
-        choixUtilisateur == bonneReponse ? "Bravo ! 🎉" : "Dommage... 😕",
-        style: const TextStyle(fontSize: 18),
-      ),
       backgroundColor: choixUtilisateur == bonneReponse ? Colors.green : Colors.red,
-      duration: const Duration(milliseconds: 500), // Très court pour ne pas ralentir le jeu
+      content: Row(
+        children: [
+          Icon(
+            estCorrect ? Icons.check_circle_outline : Icons.error_outline,
+            color: Colors.white,
+            semanticLabel: estCorrect ? "Succès" : "Erreur", // Important pour l'accessibilité
+          ),
+          const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                estCorrect ? "Bonne réponse !" : "Mauvaise réponse...",
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        duration: const Duration(seconds: 2), // Laisse assez de temps pour la
     );
 
     // On affiche la barre
@@ -227,6 +242,7 @@ class _EcranQuizzState extends State<EcranQuizz> {
               ),
             ),
             
+            // Un peu d'espace entre les boutons
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: SizedBox(
