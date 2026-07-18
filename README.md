@@ -1,67 +1,53 @@
-## Rougail Quizz
+# 🎯 Rougail Quizz
 
-## Présentation
+[![Flutter](https://img.shields.io/badge/Platform-Flutter-02569B?logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Language-Dart-0175C2?logo=dart)](https://dart.dev)
 
-Rougail Quizz est une application de quiz interactive développée avec **Flutter**.
-Ce projet a été réalisée dans le cadre d'une montée en compétences personnelle.
+## 📖 Description du Projet
+**Rougail Quizz** est une application mobile de quiz dynamique axée sur la culture réunionnaise. 
+Ce projet a été développé dans le respect des bonnes pratiques de conception logicielle du Titre Professionnel CDA (Niveau 6).
 
-L'objectif est de valider les bases du développement multiplateforme, la gestion d'état (`StatefulWidget`) et l'installation d'environnements de développement sous **Debian 12**.
+## 🚀 Fonctionnalités
+* **Gestion des Quiz** : Sélection de catégories, niveaux de difficulté et progression en temps réel.
+* **Persistance des Données** : Sauvegarde des scores locaux et de l'historique de l'utilisateur.
+* **Interface Adaptative (UI/UX)** : Design responsive adapté aux smartphones et tablettes, respectant l'accessibilité.
 
-- Objectif : Offrir une application de quizz sur l'île de La Réunion pour se cultiver et s'amuser
+## 🛠️ Stack Technique & Architecture
+* **Frontend** : Flutter & Dart
+* **State Management** :Riverpod
+* **Architecture** : Architecture propre (Clean Architecture) organisée en couches distinctes (*Data*, *Domain*, *Presentation*) pour garantir la maintenabilité et la testabilité du code.
 
-## Fonctionnalités Clés
-
-- [x] Affichage dynamique des questions
-- [x] Validation des réponses en temps réeel
-- [x] Calcul automatique du score
-- [ ] Système de navigation vers un écran de fin (en cours)
-- [ ] Persistance des données (à venir)
-
-## Stack technique
-- **Langage :** Dart
-- **Framework :** Flutter (Cible Linux Desktop)
-- **OS de développement :** Debian 12 (Bookworm)
-- **Outils de build :** CMake, Ninja, Clang++
-
-## Installation et Lancement (Debian 12)
+## 📦 Installation et Configuration
 
 ### Prérequis
-Assurez-vous d'avoir installé les dépendances système pour Flutter sur Linux :
+* Flutter SDK (Version 3.44.6)
+* Un émulateur (Android/iOS) ou un appareil physique configuré
+
+### Clonage et Lancement
 ```bash
-sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev
-```
+# 1. Cloner le dépôt
+git clone [https://github.com/ton-username/rougail_quizz.git](https://github.com/ton-username/rougail_quizz.git)
 
-#### Installation
+# 2. Accéder au dossier
+cd rougail_quizz
 
-Cloner le dépôt :
-
-```bash
-git clone [https://github.com/ton-pseudo/rougail-quizz.git](https://github.com/ton-pseudo/rougail-quizz.git)
-```
-
-Accéder au dossier :
-
-```bash
-cd rougail-quizz
-```
-
-Récupérer les dépendances Flutter :
-
-```bash
+# 3. Récupérer les dépendances
 flutter pub get
+
+# 4. Lancer l'application
+flutter run
+
 ```
+## 🧪 Qualité du Code & Tests
 
-#### Lancement
-Pour lancer l'application en mode debug sur Linux :
+Conformément aux exigences du métier de CDA, la robustesse de l'application est validée par :
 
-```bash
-flutter run -d linux
-```
+* **Tests Unitaires** : Validation des composants métier et de la logique des quiz.
 
-## Compétences validées
+* **Analyse Statique** : Utilisation du Linter Flutter officiel pour garantir un code propre et homogène.
 
-- **Maquettage et UI :** Création de composants Flutter.
+## 🛡️ Sécurité & RGPD
 
-- **Logique de programmation :** Utilisation de listes d'objets et gestion d'index.
+* Validation et nettoyage systématique des entrées utilisateur.
 
-- **Environnement :** Configuration d'une chaîne de compilation native sous Linux.
+* Stockage sécurisé des préférences et données sensibles localement.
