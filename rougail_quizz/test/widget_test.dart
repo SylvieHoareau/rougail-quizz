@@ -11,20 +11,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:rougail_quizz/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets("Affichage du titre de bienvenue sur la page d'accueil", (
+    WidgetTester tester,
+  ) async {
+    // 1. Charger le widget dans le conteneur de test virtuel
     await tester.pumpWidget(const QuizzApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // 2. Vérifier que le titre de ton Quiz est bien présent à l'écran
+    expect(find.text('Bienvenue au Rougail Quizz'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // 3. Vérifier qu'un texte d'erreur n'apparaît pas
+    expect(find.text('Erreur de chargement'), findsNothing);
   });
 }
